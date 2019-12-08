@@ -17,7 +17,6 @@ final class Plugin
     }
 
     /**
-     * @param string $term
      * @return Promise<SearchResults>
      */
     public function search(string $term): Promise

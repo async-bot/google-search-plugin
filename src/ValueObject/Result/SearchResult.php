@@ -8,9 +8,9 @@ final class SearchResult
 
     private string $title;
 
-    private string $description;
+    private ?string $description;
 
-    public function __construct(string $url, string $title, ?string $description)
+    public function __construct(string $url, string $title, ?string $description = null)
     {
         $this->url         = $url;
         $this->title       = $title;

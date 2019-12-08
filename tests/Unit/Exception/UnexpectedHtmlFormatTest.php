@@ -10,7 +10,7 @@ class UnexpectedHtmlFormatTest extends TestCase
     public function testCorrectMessageFormat(): void
     {
         $this->expectException(UnexpectedHtmlFormat::class);
-        $this->expectExceptionMessage('Could not find the `main` element in the document.');
+        $this->expectExceptionMessage('Could not find the "main" element in the document.');
 
         throw new UnexpectedHtmlFormat('main');
     }

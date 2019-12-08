@@ -29,10 +29,21 @@ class ParseSearchResultsTest extends TestCase
     public function testParserThrowsWhenMissingMainContainer(): void
     {
         $this->expectException(UnexpectedHtmlFormat::class);
-        $this->expectExceptionMessage('Could not find the `main` element in the document.');
+        $this->expectExceptionMessage('Could not find the "main" element in the document.');
 
         (new GoogleSearchParser())->parse(
             $this->getDomFromFakeResponse('missing-main-container.html'),
         );
+    }
+
+    public function testParserSetsDescriptionToNullWhenEmpty(): void
+    {
+        $searchResults = (new GoogleSearchParser())->parse(
+            $this->getDomFromFakeResponse('empty-description-element.html'),
+        );
+
+        $searchResults = iterator_to_array($searchResults);
+
+        $this->assertNull($searchResults[0]->getDescription());
     }
 }

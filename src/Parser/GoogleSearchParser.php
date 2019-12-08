@@ -20,15 +20,13 @@ final class GoogleSearchParser
             throw new UnexpectedHtmlFormat(self::CONTAINER_ELEMENT_ID);
         }
 
-        return new SearchResults(...$this->buildResultSet($mainContainer, $xpath));
+        return $this->buildResultSet($mainContainer, $xpath);
     }
 
     /**
-     * @param \DOMElement $mainContainer
-     * @param \DOMXPath   $xpath
-     * @return array<SearchResult>
+     * @return SearchResults
      */
-    private function buildResultSet(\DOMElement $mainContainer, \DOMXPath $xpath): array
+    private function buildResultSet(\DOMElement $mainContainer, \DOMXPath $xpath): SearchResults
     {
         $results = [];
 
@@ -50,7 +48,7 @@ final class GoogleSearchParser
             );
         }
 
-        return $results;
+        return new SearchResults(...$results);
     }
 
     private function getResultNode(\DOMXPath $xpath, \DOMNode $node): ?\DOMNode
@@ -86,7 +84,7 @@ final class GoogleSearchParser
     {
         $linkNode = $this->getLinkNode($xpath, $resultContainer);
 
-        return preg_replace('/^\/url\?q=/', '', $linkNode->getAttribute('href'));
+        return preg_replace('~^/url\?q=~', '', $linkNode->getAttribute('href'));
     }
 
     private function getTitle(\DOMXPath $xpath, \DOMNode $resultContainer): string
@@ -98,13 +96,7 @@ final class GoogleSearchParser
 
     private function getDescription(\DOMXPath $xpath, \DOMNode $resultContainer): ?string
     {
-        $descriptionNode = $xpath->evaluate('./div', $resultContainer)->item(2);
-
-        if ($descriptionNode === null) {
-            return null;
-        }
-
-        $descriptionText = trim($descriptionNode->textContent);
+		$descriptionText = trim($xpath->evaluate('./div', $resultContainer)->item(2)->textContent);
 
         if (!$descriptionText) {
             return null;

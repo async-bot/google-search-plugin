@@ -28,4 +28,11 @@ class SearchResultTest extends TestCase
     {
         $this->assertSame('OpenGrok for Room-11', $this->searchResult->getDescription());
     }
+
+    public function testGetDescriptionWhenNull(): void
+    {
+    	$searchResult = new SearchResult('https://heap.space', 'HeapSpace');
+
+        $this->assertNull($searchResult->getDescription());
+    }
 }
